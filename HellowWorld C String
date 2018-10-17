@@ -1,0 +1,19 @@
+//Helow World in C
+// C Sting as an array of characters
+
+#include <stdio.h>
+//#include <stdlib.h>
+
+const char *string = "Hellow World";
+
+//char string[] = "Hellow World";
+
+int main() {
+    printf("%s\n", string);
+    //   printf("%\n", string);
+    //  printf(string);
+    //   printf("%\n", &string[]);
+    
+    printf("Hello Hello World\n");
+    return 0;
+}
