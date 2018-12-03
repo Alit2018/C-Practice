@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[]) {
+    printf("0 hello world from starting the parent (pid:%d)\n", (int) getpid());
+    int rc = fork();
+    if (rc < 0) { // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) { // child (new process)
+        printf("1 hello, I am the first child of the first parent (pid:%d)\n", (int) getpid());
+    } else { // parent goes down this path (main)
+        printf("1 hello, I am the first parent of fork_rc=%d parent_ID(pid:%d)\n", rc, (int) getpid());
+    }
+    //
+    //Now the first parent and the first child can run this code below.
+    //
+    rc = fork();
+    if (rc < 0) { // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) { // child (new process)
+        printf("2 hello, I am the second child of the second fork(pid:%d)\n", (int) getpid());
+    } else { // parent goes down this path (main)
+        printf("2 hello, I am parent of the second child in the second of fork_rc=%d parent_ID(pid:%d)\n",
+               rc, (int) getpid());
+        return 0;
+    }
+}
+//0 hello world from starting a.out and the process is the parent (pid:7948)
+//1 hello, I am the first parent of fork_rc=7949(first child) parent_ID(pid:7948 I was born by a.out)
+//2 hello, I am parent of the second child in the second of fork_rc=7950(the seccond child of the first parent)  parent_ID(pid:7948 this was said by the first parent that was born with a.out)
+//The first child can run only the second fork because the first fork created him.
+//1 hello, I am the first child of the first parent(7948) (first child pid:7949)
+//2 hello, I am parent of the second child in the second of fork_rc=7951(the child of the child) parent_ID(pid:7949 this is the first child from the first fork, now acting as a parent))
+//2 hello, I am the second child of the second fork(pid:7951 this is the child of the first child)
+//2 hello, I am the second child of the second fork(pid:7950 this is the second child of first parent)
+
